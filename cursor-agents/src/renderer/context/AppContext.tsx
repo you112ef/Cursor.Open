@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
-import { AppState, Project, OpenFile, LayoutConfig, AppSettings } from '@/shared/types';
+import { AppState, Project, OpenFile, LayoutConfig, AppSettings } from '../../shared/types';
 
 // Initial state
 const initialState: AppState = {

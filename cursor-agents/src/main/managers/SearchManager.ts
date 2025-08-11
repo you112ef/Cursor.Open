@@ -1,4 +1,4 @@
-import { SearchResult } from '@/shared/types';
+import { SearchResult } from '../../shared/types';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 

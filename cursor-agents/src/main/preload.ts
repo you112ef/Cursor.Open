@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IpcChannels, AppEvents } from '@/shared/types';
+import { IpcChannels, AppEvents } from '../shared/types';
 
 // Define the API that will be exposed to the renderer process
 export interface ElectronAPI {

@@ -17,13 +17,4 @@ root.render(
   </React.StrictMode>
 );
 
-// Handle hot module replacement for development
-if (import.meta.hot) {
-  import.meta.hot.accept('./App', (newModule) => {
-    root.render(
-      <React.StrictMode>
-        <newModule.App />
-      </React.StrictMode>
-    );
-  });
-}
+// Hot module replacement is handled by Vite

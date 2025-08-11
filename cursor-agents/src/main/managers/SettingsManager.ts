@@ -1,4 +1,4 @@
-import { AppSettings } from '@/shared/types';
+import { AppSettings } from '../../shared/types';
 import Store from 'electron-store';
 
 export class SettingsManager {
