@@ -1,0 +1,122 @@
+{
+  "name": "cursor-agents",
+  "version": "1.0.0",
+  "description": "AI-powered code editor inspired by Cursor Agents",
+  "main": "dist/main/index.js",
+  "homepage": "./",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:main\" \"npm run dev:renderer\"",
+    "dev:main": "webpack --config webpack.main.config.js --mode development --watch",
+    "dev:renderer": "vite",
+    "build": "npm run build:main && npm run build:renderer",
+    "build:main": "webpack --config webpack.main.config.js --mode production",
+    "build:renderer": "vite build",
+    "start": "electron .",
+    "package": "npm run build && electron-builder",
+    "package:win": "npm run build && electron-builder --win",
+    "package:mac": "npm run build && electron-builder --mac",
+    "package:linux": "npm run build && electron-builder --linux",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:e2e": "playwright test",
+    "lint": "eslint src --ext .ts,.tsx",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "type-check": "tsc --noEmit",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "com.cursoragents.app",
+    "productName": "Cursor Agents",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.3",
+    "@heroicons/react": "^2.0.18",
+    "@monaco-editor/react": "^4.6.0",
+    "@xterm/xterm": "^5.3.0",
+    "@xterm/addon-fit": "^0.8.0",
+    "@xterm/addon-web-links": "^0.9.0",
+    "@xterm/addon-search": "^0.13.0",
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "openai": "^4.28.4",
+    "node-pty": "^1.0.0",
+    "chokidar": "^3.5.3",
+    "hnswlib-node": "^1.4.2",
+    "tiktoken": "^1.0.10",
+    "fuse.js": "^7.0.0",
+    "uuid": "^9.0.1",
+    "lodash": "^4.17.21",
+    "mime-types": "^2.1.35",
+    "js-yaml": "^4.1.0",
+    "dotenv": "^16.4.5",
+    "winston": "^3.11.0",
+    "p-queue": "^8.0.1",
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.24",
+    "@types/react": "^18.2.61",
+    "@types/react-dom": "^18.2.19",
+    "@types/uuid": "^9.0.8",
+    "@types/lodash": "^4.14.202",
+    "@types/mime-types": "^2.1.4",
+    "@types/js-yaml": "^4.0.9",
+    "@typescript-eslint/eslint-plugin": "^7.1.1",
+    "@typescript-eslint/parser": "^7.1.1",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.17",
+    "concurrently": "^8.2.2",
+    "electron": "^29.1.4",
+    "electron-builder": "^24.13.3",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "jest": "^29.7.0",
+    "monaco-editor": "^0.46.0",
+    "playwright": "^1.42.1",
+    "postcss": "^8.4.35",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.4.1",
+    "ts-jest": "^29.1.2",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.1.5",
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "ai",
+    "code-editor",
+    "electron",
+    "react",
+    "typescript",
+    "monaco-editor",
+    "cursor",
+    "agents"
+  ],
+  "author": "Cursor Agents Team",
+  "license": "MIT"
+}
