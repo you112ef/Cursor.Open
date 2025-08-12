@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import asyncio
 from typing import Any, Dict, Iterable
+from pathlib import Path
 
 from fastapi import Depends, FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from starlette.responses import Response, StreamingResponse
@@ -94,6 +97,14 @@ try:  # pragma: no cover
         FastAPIInstrumentor.instrument_app(app)
 except Exception:
     pass
+
+# Static and index
+static_dir = Path(__file__).resolve().parent / "web"
+app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
+
+@app.get("/")
+async def index() -> FileResponse:
+    return FileResponse(static_dir / "index.html")
 
 
 @app.middleware("http")

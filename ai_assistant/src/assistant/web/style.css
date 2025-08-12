@@ -1,0 +1,9 @@
+.container{max-width:800px;margin:20px auto;font-family:sans-serif}
+h1{margin:0 0 10px}
+.config{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.chat{border:1px solid #ccc;min-height:300px;padding:10px;margin-bottom:10px;overflow:auto}
+.msg{margin:6px 0}
+.msg .role{font-weight:bold;margin-right:6px}
+.input{display:flex;gap:10px}
+.input input{flex:1;padding:8px}
+.input button{padding:8px 12px}
