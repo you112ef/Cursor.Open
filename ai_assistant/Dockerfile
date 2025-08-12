@@ -15,10 +15,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir black ruff mypy pytest prometheus-client
+    && pip install --no-cache-dir black ruff mypy pytest cyclonedx-bom prometheus-client
 
 COPY src ./src
 COPY README.md ./
+
+# Create non-root user
+RUN useradd -u 10001 -m appuser && \
+    chown -R appuser:appuser /app
+USER appuser
 
 EXPOSE 8000
 

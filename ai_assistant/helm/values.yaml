@@ -1,0 +1,12 @@
+image:
+  repository: open-assistant-safe
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+env:
+  SERVER_HOST: "0.0.0.0"
+  SERVER_PORT: "8000"

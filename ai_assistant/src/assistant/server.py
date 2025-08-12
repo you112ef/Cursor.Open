@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any, Dict, Iterable, Optional
+from typing import Any, Dict, Iterable
 
 from fastapi import Depends, FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,13 +12,40 @@ from starlette.responses import Response, StreamingResponse
 from .engine import AssistantEngine
 from .config import load_settings
 from .logging_utils import configure_json_logging
-from .middleware import RequestIdMiddleware, RateLimitMiddleware
+from .middleware import RequestIdMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware, RedisRateLimitMiddleware
 from .auth import api_key_auth
 
-try:
-    import redis  # type: ignore
-except Exception:  # pragma: no cover
-    redis = None
+settings = load_settings()
+configure_json_logging(settings.log_level)
+
+# Optional Sentry
+try:  # pragma: no cover
+    if settings.sentry_dsn:
+        import sentry_sdk
+        from sentry_sdk.integrations.fastapi import FastApiIntegration
+
+        sentry_sdk.init(dsn=settings.sentry_dsn, integrations=[FastApiIntegration()])
+except Exception:
+    pass
+
+# Optional OTLP tracing
+try:  # pragma: no cover
+    if settings.otlp_endpoint:
+        from opentelemetry import trace
+        from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+        from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+        from opentelemetry.sdk.trace import TracerProvider
+        from opentelemetry.sdk.trace.export import BatchSpanProcessor
+        from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+        resource = Resource(attributes={SERVICE_NAME: "open-assistant-safe"})
+        provider = TracerProvider(resource=resource)
+        exporter = OTLPSpanExporter(endpoint=settings.otlp_endpoint)
+        provider.add_span_processor(BatchSpanProcessor(exporter))
+        trace.set_tracer_provider(provider)
+        # Instrument FastAPI after app created
+except Exception:
+    pass
 
 REQUEST_COUNT = Counter("assistant_requests_total", "Total HTTP requests", ["path", "method", "status"])
 REQUEST_LATENCY = Histogram("assistant_request_latency_seconds", "Latency", ["path", "method"])
@@ -33,18 +60,21 @@ class ChatResponse(BaseModel):
     content: str
 
 
-settings = load_settings()
-configure_json_logging(settings.log_level)
-app = FastAPI(title="Open Assistant", version="0.3.0")
+app = FastAPI(title="Open Assistant", version="0.4.0")
 
 app.add_middleware(RequestIdMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 
-# Prefer Redis rate limit if REDIS_URL is set
-if settings.redis_url and redis is not None:
-    # Placeholder for prod-grade rate limiting using Redis tokens
-    # Keep the simple in-memory one as fallback only
-    pass
-else:
+# Rate limit: Redis if configured, else in-memory
+try:
+    if settings.redis_url:
+        import redis  # type: ignore
+
+        redis_client = redis.from_url(settings.redis_url)
+        app.add_middleware(RedisRateLimitMiddleware, redis_client=redis_client, rate=120, per_seconds=60)
+    else:
+        app.add_middleware(RateLimitMiddleware, rate=120, per_seconds=60)
+except Exception:
     app.add_middleware(RateLimitMiddleware, rate=120, per_seconds=60)
 
 allow_origins = settings.allowed_origins if settings.allowed_origins else ["*"]
@@ -56,15 +86,22 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Instrument FastAPI for OTLP if available
+try:  # pragma: no cover
+    if settings.otlp_endpoint:
+        from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+        FastAPIInstrumentor.instrument_app(app)
+except Exception:
+    pass
+
 
 @app.middleware("http")
 async def enforce_body_size(request: Request, call_next):
     if request.method in {"POST", "PUT", "PATCH"}:
-        # Read body (limited)
         body = await request.body()
         if len(body) > settings.request_max_bytes:
             return Response("request too large", status_code=413)
-        # Reinject body into request scope for downstream
         request._body = body  # type: ignore[attr-defined]
     return await call_next(request)
 
