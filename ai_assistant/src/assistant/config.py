@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass
 from pathlib import Path
+from typing import List, Optional
 
 
 @dataclass
@@ -18,6 +19,15 @@ class Settings:
 
     server_host: str = "0.0.0.0"
     server_port: int = 8000
+
+    allowed_origins: List[str] | None = None
+    api_keys: List[str] | None = None
+    request_max_bytes: int = 1_000_000
+
+    sentry_dsn: str | None = None
+    otlp_endpoint: str | None = None
+
+    redis_url: str | None = None
 
 
 def _load_dotenv_if_present(env_path: Path) -> None:
@@ -37,8 +47,14 @@ def _load_dotenv_if_present(env_path: Path) -> None:
                 if key and key not in os.environ:
                     os.environ[key] = value
     except Exception:
-        # Silently ignore dotenv parse errors in stdlib mode
         pass
+
+
+def _split_env_list(value: Optional[str]) -> Optional[List[str]]:
+    if not value:
+        return None
+    items = [x.strip() for x in value.split(",") if x.strip()]
+    return items or None
 
 
 def load_settings() -> Settings:
@@ -53,4 +69,10 @@ def load_settings() -> Settings:
         log_level=os.getenv("LOG_LEVEL", "INFO"),
         server_host=os.getenv("SERVER_HOST", "0.0.0.0"),
         server_port=int(os.getenv("SERVER_PORT", "8000")),
+        allowed_origins=_split_env_list(os.getenv("ALLOWED_ORIGINS")),
+        api_keys=_split_env_list(os.getenv("API_KEYS")),
+        request_max_bytes=int(os.getenv("REQUEST_MAX_BYTES", "1000000")),
+        sentry_dsn=os.getenv("SENTRY_DSN"),
+        otlp_endpoint=os.getenv("OTLP_ENDPOINT"),
+        redis_url=os.getenv("REDIS_URL"),
     )
