@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Assistant (Safe)</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Open Assistant (Safe)</h1>
+    <div class="config">
+      <label>API Key (optional): <input id="apiKey" type="password" placeholder="X-API-Key" /></label>
+      <label>Session: <input id="sessionId" value="web" /></label>
+      <label>Stream: <input id="useStream" type="checkbox" checked /></label>
+    </div>
+    <div id="chat" class="chat"></div>
+    <div class="input">
+      <input id="message" placeholder="Type your message..." />
+      <button id="send">Send</button>
+    </div>
+  </div>
+  <script src="/static/script.js"></script>
+</body>
+</html>

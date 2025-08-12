@@ -29,6 +29,7 @@
     "appId": "com.cursoragents.app",
     "productName": "Cursor Agents",
     "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "copyright": "Copyright © 2025 ${author}",
     "directories": {
       "output": "release",
       "buildResources": "build"
@@ -36,7 +37,14 @@
     "files": [
       "dist/**/*",
       "assets/**/*",
-      "package.json"
+      "package.json",
+      "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}",
+      "!.editorconfig",
+      "!**/._*",
+      "!**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}",
+      "!**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}",
+      "!**/{appveyor.yml,.travis.yml,circle.yml}",
+      "!**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}"
     ],
     "extraResources": [
       {
@@ -45,12 +53,17 @@
         "filter": ["**/*"]
       }
     ],
+    "extraMetadata": {
+      "main": "dist/main/index.js"
+    },
     "mac": {
       "category": "public.app-category.developer-tools",
-      "icon": "build/icons/icon.icns",
+      "icon": "build/icons/icon.png",
       "hardenedRuntime": true,
+      "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist",
+      "minimumSystemVersion": "10.13.0",
       "target": [
         {
           "target": "dmg",
@@ -63,7 +76,9 @@
       ]
     },
     "win": {
-      "icon": "build/icons/icon.ico",
+      "icon": "build/icons/icon.png",
+      "publisherName": "Cursor Agents Team",
+      "verifyUpdateCodeSignature": false,
       "target": [
         {
           "target": "nsis",
@@ -72,12 +87,24 @@
         {
           "target": "portable",
           "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "ia32"]
         }
       ]
     },
     "linux": {
       "icon": "build/icons/icon.png",
       "category": "Development",
+      "synopsis": "AI-powered code editor inspired by Cursor",
+      "description": "A modern, AI-powered code editor with integrated chat, terminal, and advanced editing features. Built with Electron, React, and TypeScript.",
+      "desktop": {
+        "Name": "Cursor Agents",
+        "Comment": "AI-powered code editor",
+        "Categories": "Development;IDE;TextEditor;",
+        "Keywords": "editor;development;programming;ide;ai;cursor;"
+      },
       "target": [
         {
           "target": "AppImage",
@@ -90,34 +117,69 @@
         {
           "target": "rpm",
           "arch": ["x64"]
+        },
+        {
+          "target": "tar.gz",
+          "arch": ["x64"]
         }
       ]
     },
     "nsis": {
       "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Cursor Agents"
+      "shortcutName": "Cursor Agents",
+      "include": "build/installer.nsh",
+      "script": "build/installer.nsi"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
     },
     "dmg": {
+      "artifactName": "${productName}-${version}.${ext}",
+      "background": "build/dmg-background.png",
+      "iconSize": 100,
       "contents": [
         {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
+          "x": 380,
+          "y": 280,
           "type": "link",
           "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
         }
-      ]
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    },
+    "appImage": {
+      "artifactName": "${productName}-${version}.${ext}",
+      "synopsis": "AI-powered code editor inspired by Cursor",
+      "category": "Development"
+    },
+    "deb": {
+      "artifactName": "${productName}_${version}_${arch}.${ext}",
+      "synopsis": "AI-powered code editor inspired by Cursor",
+      "depends": ["gconf2", "gconf-service", "libnotify4", "libappindicator1", "libxtst6", "libnss3"]
+    },
+    "rpm": {
+      "artifactName": "${productName}-${version}.${arch}.${ext}",
+      "synopsis": "AI-powered code editor inspired by Cursor",
+      "depends": ["libXScrnSaver"]
     },
     "publish": {
       "provider": "github",
-      "owner": "your-username",
-      "repo": "cursor-agents"
+      "owner": "you112ef",
+      "repo": "Cursor.Open",
+      "releaseType": "release"
     }
   },
   "dependencies": {

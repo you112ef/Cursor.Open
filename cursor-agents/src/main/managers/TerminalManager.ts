@@ -1,4 +1,4 @@
-import { Terminal } from '@/shared/types';
+import { Terminal } from '../../shared/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export class TerminalManager {

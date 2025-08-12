@@ -1,7 +1,9 @@
 import { app, BrowserWindow, ipcMain, Menu, dialog, shell } from 'electron';
 import { join } from 'path';
-import { is } from '@electron-toolkit/utils';
-import { AppSettings } from '@/shared/types';
+import { AppSettings } from '../shared/types';
+
+// Check if running in development mode
+const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
 import { WindowManager } from './managers/WindowManager';
 import { FileManager } from './managers/FileManager';
 import { ProjectManager } from './managers/ProjectManager';
@@ -73,14 +75,13 @@ export class Application {
         preload: join(__dirname, '../preload/index.js'),
         sandbox: false,
         contextIsolation: true,
-        enableRemoteModule: false,
         nodeIntegration: false
       }
     });
 
     mainWindow.on('ready-to-show', () => {
       mainWindow.show();
-      if (is.dev) {
+      if (isDev) {
         mainWindow.webContents.openDevTools();
       }
     });
@@ -91,7 +92,7 @@ export class Application {
     });
 
     // Load the app
-    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+    if (isDev && process.env['ELECTRON_RENDERER_URL']) {
       mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']);
     } else {
       mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
@@ -261,7 +262,7 @@ export class Application {
           { role: 'cut' },
           { role: 'copy' },
           { role: 'paste' },
-          { role: 'selectall' }
+          { role: 'selectAll' }
         ]
       },
       {

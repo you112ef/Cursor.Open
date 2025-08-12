@@ -118,9 +118,9 @@ export class WindowManager {
     });
 
     // Handle external links
-    window.webContents.on('new-window', (event, url) => {
-      event.preventDefault();
+    window.webContents.setWindowOpenHandler(({ url }) => {
       require('electron').shell.openExternal(url);
+      return { action: 'deny' };
     });
   }
 }

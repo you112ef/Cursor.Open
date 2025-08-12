@@ -1,4 +1,4 @@
-import { Project } from '@/shared/types';
+import { Project } from '../../shared/types';
 import { promises as fs } from 'fs';
 import { join, basename } from 'path';
 import { v4 as uuidv4 } from 'uuid';

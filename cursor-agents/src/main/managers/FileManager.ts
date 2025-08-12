@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import { join, extname, basename, dirname } from 'path';
 import { watch, FSWatcher } from 'chokidar';
-import { FileItem } from '@/shared/types';
+import { FileItem } from '../../shared/types';
 import { v4 as uuidv4 } from 'uuid';
 
 export class FileManager {

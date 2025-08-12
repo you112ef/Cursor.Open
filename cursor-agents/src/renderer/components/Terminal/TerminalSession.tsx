@@ -16,7 +16,7 @@ export function TerminalSession({ terminalId }: TerminalSessionProps) {
     const initTerminal = async () => {
       try {
         // Create terminal session in main process
-        await window.electron.terminal.create({ workingDirectory: process.cwd() });
+        await window.electron.terminal.create(process.cwd());
         setIsReady(true);
         
         // Add welcome message
@@ -40,7 +40,7 @@ export function TerminalSession({ terminalId }: TerminalSessionProps) {
     // Cleanup on unmount
     return () => {
       if (isReady) {
-        window.electron.terminal.close({ id: terminalId }).catch(console.error);
+        window.electron.terminal.close(terminalId).catch(console.error);
       }
     };
   }, [terminalId]);
@@ -81,7 +81,7 @@ export function TerminalSession({ terminalId }: TerminalSessionProps) {
 
     // For real terminal integration, send command to Electron backend
     try {
-      await window.electron.terminal.write({ id: terminalId, data: command + '\r\n' });
+      await window.electron.terminal.write(terminalId, command + '\r\n');
       
       // Simulate output for demo purposes (this would normally come from terminal events)
       setTimeout(() => {

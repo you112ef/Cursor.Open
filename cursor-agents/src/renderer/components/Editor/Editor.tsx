@@ -23,7 +23,7 @@ export function Editor() {
       fontFamily: settings.fontFamily,
       tabSize: settings.editor.tabSize,
       insertSpaces: settings.editor.insertSpaces,
-      wordWrap: settings.editor.wordWrap ? 'on' : 'off',
+      wordWrap: state.layout.editor.wordWrap ? 'on' : 'off',
       minimap: { enabled: state.layout.editor.minimap },
       lineNumbers: state.layout.editor.lineNumbers ? 'on' : 'off',
       automaticLayout: true,
@@ -49,7 +49,6 @@ export function Editor() {
       unfoldOnClickAfterEndOfLine: true,
       links: true,
       colorDecorators: true,
-      lightbulb: { enabled: true },
       codeActionsOnSave: settings.editor.codeAction ? {
         'source.organizeImports': true,
         'source.fixAll': true
@@ -174,8 +173,7 @@ export function Editor() {
               showFoldingControls: 'mouseover',
               unfoldOnClickAfterEndOfLine: true,
               links: true,
-              colorDecorators: true,
-              lightbulb: { enabled: true }
+              colorDecorators: true
             }}
             loading={
               <div className="h-full flex items-center justify-center">

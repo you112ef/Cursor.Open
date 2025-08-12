@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
-import { FileItem } from '@/shared/types';
+import { FileItem } from '../../../shared/types';
 import { FileTreeItem } from './FileTreeItem';
 
 export function FileExplorer() {
