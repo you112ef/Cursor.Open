@@ -1,0 +1,21 @@
+{
+  "info": {
+    "name": "Open Assistant Safe",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {"method": "GET", "url": "http://localhost:8000/health"}
+    },
+    {
+      "name": "Chat",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "X-API-Key", "value": "<YOUR_KEY>"}],
+        "url": "http://localhost:8000/chat",
+        "body": {"mode": "raw", "raw": "{\n  \"session_id\": \"t1\",\n  \"message\": \"Hello\"\n}"}
+      }
+    }
+  ]
+}

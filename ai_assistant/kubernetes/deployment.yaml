@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-assistant-safe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-assistant-safe
+  template:
+    metadata:
+      labels:
+        app: open-assistant-safe
+    spec:
+      containers:
+        - name: api
+          image: open-assistant-safe:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SERVER_HOST
+              value: "0.0.0.0"
+            - name: SERVER_PORT
+              value: "8000"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-assistant-safe
+spec:
+  type: ClusterIP
+  selector:
+    app: open-assistant-safe
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000

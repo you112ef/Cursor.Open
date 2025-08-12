@@ -1,0 +1,5 @@
+apiVersion: v2
+name: open-assistant-safe
+version: 0.1.0
+appVersion: "0.4.0"
+description: Safe open-source assistant framework
