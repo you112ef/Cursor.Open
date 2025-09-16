@@ -69,30 +69,35 @@ export default function DashboardPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div className="absolute top-0 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-0 right-1/4 w-72 h-72 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      
       {/* Header */}
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Code2 className="h-5 w-5 text-primary-foreground" />
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg">
+                <Code2 className="h-6 w-6 text-primary-foreground" />
               </div>
               <div className="hidden sm:block">
-                <h1 className="text-xl font-bold">Dish Platform</h1>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Dish Platform</h1>
                 <p className="text-sm text-muted-foreground">Development Dashboard</p>
               </div>
             </div>
             
             <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="sm" className="hidden sm:flex">
+              <Button variant="ghost" size="sm" className="hidden sm:flex hover:bg-primary/10">
                 <Search className="h-4 w-4 mr-2" />
                 Search
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-primary/10">
                 <Bell className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="hover:bg-primary/10">
                 <Settings className="h-4 w-4" />
               </Button>
             </div>
@@ -100,71 +105,94 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-6 relative z-10">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-2">Welcome back!</h2>
-          <p className="text-muted-foreground">Ready to build something amazing?</p>
+        <div className="mb-12">
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            Welcome back!
+          </h2>
+          <p className="text-xl text-muted-foreground">Ready to build something amazing? Let's get started!</p>
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {quickActions.map((action, index) => (
-            <Card key={index} className="cursor-pointer hover:shadow-md transition-shadow">
-              <CardContent className="p-4 text-center">
-                <action.icon className="h-8 w-8 mx-auto mb-2 text-primary" />
-                <p className="text-sm font-medium">{action.label}</p>
+            <Card key={index} className="group cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 hover:border-primary/20 bg-card/50 backdrop-blur">
+              <CardContent className="p-6 text-center">
+                <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <action.icon className="h-6 w-6 text-primary" />
+                </div>
+                <p className="text-sm font-medium group-hover:text-primary transition-colors">{action.label}</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* Main Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-            <TabsTrigger value="projects">Projects</TabsTrigger>
-            <TabsTrigger value="ai">AI Assistant</TabsTrigger>
-            <TabsTrigger value="terminal">Terminal</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-card/50 backdrop-blur border-2">
+            <TabsTrigger value="projects" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <FileText className="h-4 w-4 mr-2" />
+              Projects
+            </TabsTrigger>
+            <TabsTrigger value="ai" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Brain className="h-4 w-4 mr-2" />
+              AI Assistant
+            </TabsTrigger>
+            <TabsTrigger value="terminal" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Terminal className="h-4 w-4 mr-2" />
+              Terminal
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </TabsTrigger>
           </TabsList>
 
           {/* Projects Tab */}
-          <TabsContent value="projects" className="space-y-6">
+          <TabsContent value="projects" className="space-y-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <h3 className="text-lg font-semibold">Recent Projects</h3>
-              <Button>
+              <div>
+                <h3 className="text-2xl font-bold mb-2">Recent Projects</h3>
+                <p className="text-muted-foreground">Manage and access your development projects</p>
+              </div>
+              <Button className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg">
                 <Plus className="h-4 w-4 mr-2" />
                 New Project
               </Button>
             </div>
 
-            <div className="grid gap-4">
+            <div className="grid gap-6">
               {recentProjects.map((project) => (
-                <Card key={project.id} className="hover:shadow-md transition-shadow">
+                <Card key={project.id} className="group hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/20 bg-card/50 backdrop-blur">
                   <CardContent className="p-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold">{project.name}</h4>
-                          <Badge variant={project.status === 'active' ? 'default' : 'secondary'}>
-                            {project.status}
-                          </Badge>
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                            <Code2 className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <h4 className="text-lg font-semibold group-hover:text-primary transition-colors">{project.name}</h4>
+                            <Badge variant={project.status === 'active' ? 'default' : 'secondary'} className="mt-1">
+                              {project.status}
+                            </Badge>
+                          </div>
                         </div>
-                        <div className="flex flex-wrap gap-2 text-sm text-muted-foreground mb-2">
-                          <span>{project.language}</span>
-                          <span>•</span>
-                          <span>{project.framework}</span>
+                        <div className="flex flex-wrap gap-3 text-sm text-muted-foreground mb-3">
+                          <span className="px-2 py-1 bg-primary/10 rounded-md">{project.language}</span>
+                          <span className="px-2 py-1 bg-secondary/10 rounded-md">{project.framework}</span>
                         </div>
                         <p className="text-sm text-muted-foreground">
                           Last modified: {project.lastModified}
                         </p>
                       </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
+                      <div className="flex gap-3">
+                        <Button variant="outline" size="sm" className="hover:bg-primary/10">
                           <Play className="h-4 w-4 mr-2" />
                           Open
                         </Button>
-                        <Button variant="ghost" size="sm">
+                        <Button variant="ghost" size="sm" className="hover:bg-primary/10">
                           <Settings className="h-4 w-4" />
                         </Button>
                       </div>
