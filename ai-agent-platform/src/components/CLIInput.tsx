@@ -20,13 +20,13 @@ export function CLIInput() {
     
     if (!agentInfo) return
 
-    setCurrentAgent(agent.id)
+    setCurrentAgent(agent)
     setTerminalOpen(true)
 
     // Create initial activity
     const activityId = Math.random().toString(36).substr(2, 9)
     addAgentActivity({
-      agent: agent.id,
+      agent: agent,
       command: input,
       output: [],
       status: 'running'
@@ -90,14 +90,13 @@ export function CLIInput() {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Tell Sam what you want"
           className="flex-1"
-          size="lg"
         />
         <Button type="submit" size="lg">
           <Send className="h-4 w-4" />
         </Button>
       </div>
       <div className="mt-2 text-sm text-gray-500 text-center">
-        Try: "Set up a database", "Add authentication", or "/claude help"
+        Try: &quot;Set up a database&quot;, &quot;Add authentication&quot;, or &quot;/claude help&quot;
       </div>
     </form>
   )
