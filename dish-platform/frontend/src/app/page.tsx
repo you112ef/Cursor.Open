@@ -21,7 +21,10 @@ import {
   Sparkles,
   Rocket,
   Globe,
-  Heart
+  Heart,
+  Monitor,
+  Cpu,
+  Layers
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -146,10 +149,16 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Button size="lg" asChild className="bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-xl transform hover:scale-105 transition-all">
-              <Link href="/dashboard" className="flex items-center gap-2">
+              <Link href="/ide" className="flex items-center gap-2">
                 <Rocket className="h-5 w-5" />
-                Start Building Now
+                Launch IDE
                 <ArrowRight className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild className="border-2 hover:bg-primary/10 transform hover:scale-105 transition-all">
+              <Link href="/dashboard" className="flex items-center gap-2">
+                <Monitor className="h-5 w-5" />
+                Dashboard
               </Link>
             </Button>
             <Button variant="outline" size="lg" asChild className="border-2 hover:bg-primary/10 transform hover:scale-105 transition-all">

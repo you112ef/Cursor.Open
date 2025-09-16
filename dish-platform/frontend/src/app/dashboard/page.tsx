@@ -23,6 +23,7 @@ import {
   Download,
   Upload
 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState('projects')
@@ -90,6 +91,24 @@ export default function DashboardPage() {
             </div>
             
             <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:bg-primary/10">
+                <Link href="/ide">
+                  <Code2 className="h-4 w-4 mr-2" />
+                  IDE
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:bg-primary/10">
+                <Link href="/sandbox">
+                  <Terminal className="h-4 w-4 mr-2" />
+                  Sandbox
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:bg-primary/10">
+                <Link href="/collaboration">
+                  <Users className="h-4 w-4 mr-2" />
+                  Collaborate
+                </Link>
+              </Button>
               <Button variant="ghost" size="sm" className="hidden sm:flex hover:bg-primary/10">
                 <Search className="h-4 w-4 mr-2" />
                 Search
