@@ -64,7 +64,7 @@ const initialServices: Service[] = [
   },
 ]
 
-export const useStore = create<AppState>((set, get) => ({
+export const useStore = create<AppState>((set) => ({
   services: initialServices,
   agentActivities: [],
   isTerminalOpen: false,
