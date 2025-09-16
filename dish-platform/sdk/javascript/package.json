@@ -1,0 +1,51 @@
+{
+  "name": "@dish-platform/sdk",
+  "version": "1.0.0",
+  "description": "JavaScript/TypeScript SDK for Dish Platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "dish-platform",
+    "ai",
+    "code-editor",
+    "sdk",
+    "typescript"
+  ],
+  "author": "Dish Platform Team",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.2",
+    "socket.io-client": "^4.7.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.8",
+    "@types/node": "^20.10.5",
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/dish-platform.git",
+    "directory": "sdk/javascript"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/dish-platform/issues"
+  },
+  "homepage": "https://dish-platform.dev/docs/sdk/javascript"
+}

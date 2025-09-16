@@ -1,0 +1,198 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  firstName String?
+  lastName  String?
+  avatar    String?
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  projects      Project[]
+  collaborations ProjectCollaborator[]
+  apiKeys       ApiKey[]
+  sessions      Session[]
+  activities    Activity[]
+
+  @@map("users")
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  language    String        @default("typescript")
+  framework   String?
+  isPublic    Boolean       @default(false)
+  ownerId     String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  owner         User                  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  files         ProjectFile[]
+  collaborators ProjectCollaborator[]
+  activities    Activity[]
+  deployments  Deployment[]
+
+  @@map("projects")
+}
+
+model ProjectFile {
+  id        String   @id @default(cuid())
+  name      String
+  path      String
+  content   String   @default("")
+  language  String?
+  size      Int      @default(0)
+  projectId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, path])
+  @@map("project_files")
+}
+
+model ProjectCollaborator {
+  id        String             @id @default(cuid())
+  userId    String
+  projectId String
+  role      CollaborationRole  @default(VIEWER)
+  joinedAt  DateTime           @default(now())
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+  @@map("project_collaborators")
+}
+
+model ApiKey {
+  id          String   @id @default(cuid())
+  name        String
+  key         String   @unique
+  provider    String
+  isActive    Boolean  @default(true)
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("api_keys")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Activity {
+  id        String     @id @default(cuid())
+  type      ActivityType
+  message   String
+  metadata  Json?
+  userId    String
+  projectId String?
+  createdAt DateTime   @default(now())
+
+  // Relations
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("activities")
+}
+
+model Deployment {
+  id        String         @id @default(cuid())
+  name      String
+  status    DeploymentStatus @default(PENDING)
+  url       String?
+  logs      String?
+  projectId String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("deployments")
+}
+
+model SandboxExecution {
+  id        String   @id @default(cuid())
+  code      String
+  language  String
+  output    String?
+  error     String?
+  status    String   @default("pending")
+  userId    String
+  createdAt DateTime @default(now())
+
+  @@map("sandbox_executions")
+}
+
+// Enums
+enum UserRole {
+  USER
+  ADMIN
+  MODERATOR
+}
+
+enum CollaborationRole {
+  OWNER
+  EDITOR
+  VIEWER
+}
+
+enum ActivityType {
+  PROJECT_CREATED
+  PROJECT_UPDATED
+  PROJECT_DELETED
+  FILE_CREATED
+  FILE_UPDATED
+  FILE_DELETED
+  COLLABORATOR_ADDED
+  COLLABORATOR_REMOVED
+  DEPLOYMENT_CREATED
+  DEPLOYMENT_UPDATED
+  DEPLOYMENT_DELETED
+}
+
+enum DeploymentStatus {
+  PENDING
+  BUILDING
+  DEPLOYING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
