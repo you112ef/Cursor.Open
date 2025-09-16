@@ -156,6 +156,12 @@ export default function HomePage() {
               </Link>
             </Button>
             <Button variant="outline" size="lg" asChild className="border-2 hover:bg-primary/10 transform hover:scale-105 transition-all">
+              <Link href="/agent" className="flex items-center gap-2">
+                <Brain className="h-5 w-5" />
+                Agent CLI
+              </Link>
+            </Button>
+            <Button variant="outline" size="lg" asChild className="border-2 hover:bg-primary/10 transform hover:scale-105 transition-all">
               <Link href="/dashboard" className="flex items-center gap-2">
                 <Monitor className="h-5 w-5" />
                 Dashboard

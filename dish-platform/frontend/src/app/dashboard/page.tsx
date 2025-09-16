@@ -98,6 +98,12 @@ export default function DashboardPage() {
                 </Link>
               </Button>
               <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:bg-primary/10">
+                <Link href="/agent">
+                  <Brain className="h-4 w-4 mr-2" />
+                  Agent CLI
+                </Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild className="hidden sm:flex hover:bg-primary/10">
                 <Link href="/sandbox">
                   <Terminal className="h-4 w-4 mr-2" />
                   Sandbox

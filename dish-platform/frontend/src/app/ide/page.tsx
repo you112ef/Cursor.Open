@@ -35,6 +35,7 @@ import {
   Bell,
   User
 } from 'lucide-react'
+import Link from 'next/link'
 
 export default function IDEPage() {
   const [activeTab, setActiveTab] = useState('editor')
@@ -83,6 +84,12 @@ export default function IDEPage() {
         </div>
 
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/agent">
+              <Brain className="h-4 w-4 mr-2" />
+              Agent CLI
+            </Link>
+          </Button>
           <Button variant="outline" size="sm">
             <Search className="h-4 w-4" />
           </Button>
